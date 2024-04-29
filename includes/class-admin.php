@@ -48,28 +48,39 @@ class Admin {
 				esc_html_e( $output );
 				?>
 			</p>
-			<a href="<?php get_site_url(); ?>/wp-admin/admin.php?page=cng-title">Reset</a>
+			<a href="<?php echo get_site_url(); ?>/wp-admin/admin.php?page=cng-title">Reset</a>
 			<?php
 		} else {
 			?>
 			<p>This page lets an administrator schedule an action. </p>
+			<form method="post" action="<?php echo esc_url(add_query_arg('action', 'add-single')); ?>">
+			<label for="new_title">New Title:</label>
+			<input type="text" id="new_title" name="new_title" required>
+			<button type="submit">Schedule Title Change</button>
+		</form>
 			<?php
 			$url = add_query_arg( 'action', 'add-single' );
 			?>
-		<li><a href="<?php echo esc_url( $url ); ?>">Add single scheduled action.</a></li>
+		<!-- <li><a href="<?php echo esc_url( $url ); ?>">Add single scheduled action.</a></li> -->
 		<?php
 		}
 	}
 
 	function add_single_action() {
-		$timestamp    = strtotime('+ 2 minutes');
-		$hook       = 'srs_schedule_action';
-		$args       = array('my_custom_arg' => 'custom_val');
-		$group      = '';
-		$job_id = \as_schedule_single_action($timestamp, $hook, $args, $group);
+		if (isset($_POST['new_title'])) {
+			$new_title = sanitize_text_field($_POST['new_title']);
+			$timestamp    = strtotime('+ 2 minutes');
+			$hook       = 'srs_schedule_action';
+			$args       = array('new_title' => $new_title);
+			$group      = '';
+			$job_id = as_schedule_single_action($timestamp, $hook, $args, $group);
+		}
 		return 'Action added with Job ID: ' . $job_id;
 	}
-	public function change_title() {
-		update_option( 'blogname', 'New Title!!!' );
+	public function change_title($args) {
+		if (isset($args['new_title'])) {
+			update_option('blogname', $args['new_title']);
+		}
 	}
+
 }
