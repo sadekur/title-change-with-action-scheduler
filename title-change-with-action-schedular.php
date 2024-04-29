@@ -71,6 +71,7 @@ class Plugin {
 
         // Load frontend class.
         require_once TCA_PLUGIN_DIR . 'includes/class-frontend.php';
+
     }
 
     /**
