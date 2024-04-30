@@ -4,6 +4,7 @@
  * Description: This plugin allows scheduling actions to change titles.
  * Version: 1.0
  * Author: SRS
+ * Requires Plugins: woocommerce
  * Author URI: http://srs.com
  * Text Domain: title-change-action-scheduler
  * Domain Path: /languages
